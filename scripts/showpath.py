@@ -14,7 +14,7 @@ def callback( msg):
 
 def subscriber_plan():
        rospy.init_node('Showpath', anonymous=False)#init
-       rospy.Subscriber("/move_base/DWAPlannerROS/global_plan", Path,callback)
+       rospy.Subscriber("/move_base/NavfnROS/plan", Path,callback)
       # print("im here2!\r\n")
 
 if __name__ == '__main__':
