@@ -1,6 +1,9 @@
+# import numpy as np
 import operator
 
 "定义一个类，存放节点各种属性"
+
+
 class Treasure_Index:
     "对序号经行处理"
 
@@ -12,7 +15,10 @@ class Treasure_Index:
         self.track = []
         self.cost = 0
 
+
 "对类经行初始化处理"
+
+
 def Treasure_Indexs_Init():
     # 给序号赋予基础信息
     global Treasure_Indexs
@@ -97,7 +103,10 @@ def Treasure_Indexs_Init():
     Treasure_Indexs[77] = Treasure_Index(77, [76, 61], [1, 2], [9, 9])
     return Treasure_Indexs
 
+
 "寻找外围点中代价最小的点"
+
+
 def FindMinOutPoint(OutPoints):
     Cost = []
     for OutPoint in OutPoints:
@@ -105,19 +114,28 @@ def FindMinOutPoint(OutPoints):
     min_index, min_number = min(enumerate(Cost), key=operator.itemgetter(1))
     return OutPoints[min_index]
 
+
 "判断当前节点可否通行"
+
+
 def GoOrNot(goal_point):
     if len(Treasure_Indexs[goal_point].NextNums) > 0:
         return True
     else:
         return False
 
+
 "判断当前点可通行的点个数"
+
+
 def PaneelNum(goal_point):
     Num = len(Treasure_Indexs[goal_point].NextNums)
     return Num
 
+
 "防止线路重合"
+
+
 def AddTrack(point, point_tracks):
     flag = 1;
     for point_track in point_tracks:
@@ -127,10 +145,13 @@ def AddTrack(point, point_tracks):
         point_tracks.append(point)
     return point_tracks
 
+
 "将路径节点转换为坐标点"
+
+
 def GetPoints(Tracks):
     # Treasure_Indexs_Init()
-    points = [300,300]
+    points = [300, 300]
     i = 0
     # if type(Tracks) == int :
     # points.append(Treasure_Indexs[Tracks].point)
@@ -145,15 +166,21 @@ def GetPoints(Tracks):
     #         i = i + 1
     return points
 
+
 "根据坐标返回节点号"
-def LocationChange(x,y):
+
+
+def LocationChange(x, y):
     for Treasure_Index in Treasure_Indexs:
         if x == Treasure_Index.point[0]:
             if y == Treasure_Index.point[1]:
                 return Treasure_Index.Num
 
+
 "根据坐标返回当前节点号"
-def GetLocation(x,y):
+
+
+def GetLocation(x, y):
     x = x // 40
     y = y // 40
     for Treasure_Index in Treasure_Indexs:
@@ -165,13 +192,14 @@ def GetLocation(x,y):
                 return Treasure_Index.Num
 
 
-
 "根据当前位置，判断下一个位置该怎么移动"
-def GetDirection(Tracks,points):
+
+
+def GetDirection(Tracks, points):
     i = 0
-    for Track in Tracks :
-        if Track == points :
-            if Treasure_Indexs[Track].point[0] < Treasure_Indexs[Tracks[i+1]].point[0]:
+    for Track in Tracks:
+        if Track == points:
+            if Treasure_Indexs[Track].point[0] < Treasure_Indexs[Tracks[i + 1]].point[0]:
                 return 180
             if Treasure_Indexs[Track].point[0] > Treasure_Indexs[Tracks[i + 1]].point[0]:
                 return 0
@@ -184,27 +212,29 @@ def GetDirection(Tracks,points):
 
 
 "获取下一个路口的路况"
+
+
 # 1是L
 # 2是T，向上看
 # 3是T，向左右看
 # 4是十字
 
-def GetNextRoad(Location1_X,Location1_Y,Location2_X,Location2_Y):
+def GetNextRoad(Location1_X, Location1_Y, Location2_X, Location2_Y):
     Location1 = GetLocation(Location1_X, Location1_Y)
     Location1_X = Treasure_Indexs[Location1].point[0]
     Location1_Y = Treasure_Indexs[Location1].point[1]
     # print(Location1)
     Location2 = GetLocation(Location2_X, Location2_Y)
     # print(Location2)
-    if(len(Treasure_Indexs[Location2].NextNums) == 2 ) :
+    if (len(Treasure_Indexs[Location2].NextNums) == 2):
         return 1
-    if(len(Treasure_Indexs[Location2].NextNums) == 3 ) :
+    if (len(Treasure_Indexs[Location2].NextNums) == 3):
         NextNums = Treasure_Indexs[Location2].NextNums
         NextPoints = []
         for NextNum in NextNums:
-            NextPoints.append((Treasure_Indexs[NextNum].point[0],Treasure_Indexs[NextNum].point[1]))
+            NextPoints.append((Treasure_Indexs[NextNum].point[0], Treasure_Indexs[NextNum].point[1]))
         print(NextPoints)
-        for NextPoint in NextPoints :
+        for NextPoint in NextPoints:
             if (Location1_X == NextPoint[0]) & (Location1_Y == NextPoint[1]):
                 NextPoints.remove(NextPoint)
         print(NextPoints)
@@ -213,19 +243,19 @@ def GetNextRoad(Location1_X,Location1_Y,Location2_X,Location2_Y):
         dirction_U = 0
         dirction_D = 0
         for NextPoint in NextPoints:
-            if (Treasure_Indexs[Location2].point[0] - NextPoint[0] >0):
+            if (Treasure_Indexs[Location2].point[0] - NextPoint[0] > 0):
                 dirction_L = dirction_L + 1
-            if (Treasure_Indexs[Location2].point[0] - NextPoint[0] <0):
+            if (Treasure_Indexs[Location2].point[0] - NextPoint[0] < 0):
                 dirction_R = dirction_R + 1
-            if (Treasure_Indexs[Location2].point[1] - NextPoint[1] <0):
+            if (Treasure_Indexs[Location2].point[1] - NextPoint[1] < 0):
                 dirction_D = dirction_D + 1
-            if (Treasure_Indexs[Location2].point[1] - NextPoint[1] >0):
+            if (Treasure_Indexs[Location2].point[1] - NextPoint[1] > 0):
                 dirction_U = dirction_U + 1
         print(dirction_R)
         print(dirction_L)
         print(dirction_U)
         print(dirction_D)
-        if ((dirction_R == 1)&(dirction_L == 1))or((dirction_D == 1)&(dirction_U == 1)):
+        if ((dirction_R == 1) & (dirction_L == 1)) or ((dirction_D == 1) & (dirction_U == 1)):
             return 2
         else:
             return 3
@@ -233,10 +263,11 @@ def GetNextRoad(Location1_X,Location1_Y,Location2_X,Location2_Y):
         return 4
 
 
-
 "获取索引的路径"
+
+
 def GetTrack(H):
-    if(H==1):
+    if (H == 1):
         return Global_Track_1
     if (H == 2):
         return Global_Track_2
@@ -255,6 +286,7 @@ def GetTrack(H):
     if (H == 9):
         return Global_Track_9
 
+
 # 输入：
 # Location_X坐标X
 # Location_Y坐标Y
@@ -270,8 +302,10 @@ def GetTrack(H):
 # 2是十字右转
 # 1是十字左转
 "寻找当前坐标的下一个路口怎么走"
-def GetNextDirction(Location_X,Location_Y,H):
-    Location = GetLocation(Location_X,Location_Y)
+
+
+def GetNextDirction(Location_X, Location_Y, H):
+    Location = GetLocation(Location_X, Location_Y)
     num = 0
     Indexs = GetTrack(H)
     # print("Index=",Indexs)
@@ -295,8 +329,8 @@ def GetNextDirction(Location_X,Location_Y,H):
         print("vector2=", vector2)
         print("vector=", vector)
         dirction = 0
-        if(vector1[0]>0):
-            if(vector2[1]>0):
+        if (vector1[0] > 0):
+            if (vector2[1] > 0):
                 dirction = 1
             if (vector2[1] < 0):
                 dirction = 3
@@ -305,7 +339,7 @@ def GetNextDirction(Location_X,Location_Y,H):
                 dirction = 3
             if (vector2[1] < 0):
                 dirction = 1
-        elif(vector1[1]>0):
+        elif (vector1[1] > 0):
             if (vector2[0] > 0):
                 dirction = 3
             if (vector2[0] < 0):
@@ -344,7 +378,7 @@ def GetNextDirction(Location_X,Location_Y,H):
             if (dirction == 3):
                 print("-|左转")
                 return 1
-        if (Road ==4):
+        if (Road == 4):
             if (dirction == 0):
                 print("十字道路直走")
                 return 0
@@ -359,8 +393,11 @@ def GetNextDirction(Location_X,Location_Y,H):
         print("直走")
         return 0
 
+
 # H是第几条路径
 "返回路径的所有方向点"
+
+
 def GetNextDirctions(H):
     Tracks = GetTrack(H)
     # print(Tracks)
@@ -372,11 +409,14 @@ def GetNextDirctions(H):
         x = point[0]
         y = point[1]
         # print(GetNextDirction(x, y, H))
-        Dir.append(GetNextDirction(x,y,H))
+        Dir.append(GetNextDirction(x, y, H))
 
     return Dir
 
+
 "定义路径寻找函数，作为主要函数"
+
+
 def FindTrack(first_point, last_point):
     "目标点从初始点开始"
     Treasure_Indexs_Init()
@@ -446,7 +486,7 @@ def FindTrack(first_point, last_point):
                     "目标点索引"
                     goal_point = NextNum
                     "添加目标点路径"
-                    Treasure_Indexs[goal_point].track = Treasure_Indexs[goal_point1].track
+                    Treasure_Indexs[goal_point].track = Treasure_Indexs[goal_point1].track.copy()
                     Treasure_Indexs[goal_point].track.append(goal_point)
                     AddTrack(goal_point, point_tracks)
                     track = Treasure_Indexs[goal_point].track
@@ -481,14 +521,17 @@ def FindTrack(first_point, last_point):
             # print("向上")
     return Treasure_Indexs[last_point].track
 
+
 # Treaseures是所有宝藏的位置，无返回值
 "用于文件内部确定所有路径"
+
+
 def FindTracks(Treaseures):
-    global Global_Track_1 , Global_Track_2 ,Global_Track_3 ,Global_Track_4 ,Global_Track_5 ,Global_Track_6 ,Global_Track_7,Global_Track_8,Global_Track_9
+    global Global_Track_1, Global_Track_2, Global_Track_3, Global_Track_4, Global_Track_5, Global_Track_6, Global_Track_7, Global_Track_8, Global_Track_9
     Treasures_Index = []
     # print("len(Treaseures)",len(Treaseures))
     for Treasure in Treaseures:
-        Treasures_Index.append(GetLocation(Treasure[0],Treasure[1]))
+        Treasures_Index.append(GetLocation(Treasure[0], Treasure[1]))
     if (len(Treaseures) == 2):
         Global_Track_1 = FindTrack(Treasures_Index[0], Treasures_Index[1])
         Treasure_Indexs_Init()
@@ -570,7 +613,7 @@ def FindTracks(Treaseures):
         Global_Track_8 = FindTrack(Treasures_Index[7], Treasures_Index[8])
         Treasure_Indexs_Init()
     if (len(Treaseures) == 10):
-        Global_Track_1 = FindTrack(Treasures_Index[0],Treasures_Index[1])
+        Global_Track_1 = FindTrack(Treasures_Index[0], Treasures_Index[1])
         Treasure_Indexs_Init()
         Global_Track_2 = FindTrack(Treasures_Index[1], Treasures_Index[2])
         Treasure_Indexs_Init()
@@ -602,14 +645,10 @@ def FindTracks(Treaseures):
 # 给序号赋予基础信息
 Treasure_Indexs = [Treasure_Index(0, [1, 16], [1, 2], [0, 0]) for i in range(0, 78)]
 Treasure_Indexs_Init()
-
-# tracks = FindTracks(((20,380),(340,220),(180,260),(380,300),(100,300),(220, 140.),( 60, 180.),(20, 100.),(300,100.),(380,20)))
-tracks = FindTrack(71,44)
-# print("begain",Treasure_Indexs[40].Num,Treasure_Indexs[40].track)
-# print("begain",Treasure_Indexs[63].track)
-# print(tracks)
-# Dir = GetNextDirctions(1)
-# print(Dir)
+tracks = FindTracks(((20, 380), (340, 220), (180, 260), (380, 300), (100, 300), (220, 140.), (60, 180.), (20, 100.),
+                     (300, 100.), (380, 20)))
+Dir = GetNextDirctions(1)
+print(Dir)
 # tracks = FindTracks(((20,380),(340,220),(180,260),(380,300),(100,300),(220, 140.),( 60, 180.),(20, 100.),(300,100.),(380,20)))
 # for track in Global_Track_6:
 #     point = GetPoints(track)
@@ -620,5 +659,3 @@ tracks = FindTrack(71,44)
 #     dir = GetNextDirction(x,y,6)
 #
 #     print("dir = ",dir)
-
-
